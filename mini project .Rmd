@@ -1,0 +1,125 @@
+---
+title: "mini project"
+output: word_document
+date: "2026-02-28"
+---
+```{r}
+#here we are importing the dataset and loading it in the r 
+data <- read.csv("C:/Users/DAMAN/Downloads/r programming project-2.csv")
+data
+#we are changing names of the column here to make it more understanding about the data 
+names(data)
+names(data) <- c(
+  "ProductType",
+  "SKU",
+  "Price",
+  "Availability",
+  "ProductsSold",
+  "Revenue",
+  "ProductionVolume",
+  "LeadTime",
+  "ManufacturingCost"
+)
+View(data)
+#we are performing basic statistical measures 
+names(data)
+mean(data$Price,na.rm=T)
+mode(data$Price)
+var(data$Price)
+sd(data$Price)
+quantile(data$Price)
+summary(data)
+str(data)
+
+
+
+#frequency distribution of the prices 
+table(cut(data$Price,breaks=c(0,20,40,60,80,100)))
+table(data$Price)
+data$PriceCategory <- ifelse(data$Price < 50, "Low",
+                       ifelse(data$Price < 100, "Medium",
+                       ifelse(data$Price < 200, "High")))
+
+#histogram of booth revenue and price
+hist(data$Price,
+     col="red",
+     main="price and manufacturing cost histogram",
+     xlab = "values")
+hist(data$ManufacturingCost,
+     col="blue",
+     add=T)
+#scatter plot for the revenue and price
+boxplot(data$Price,
+     data$Revenue,
+     main="box plot for revenue and price",
+     xlab="price",
+     ylab="revenue",
+     pch=19,
+     col="yellow")
+
+
+#“Analysis of Product Price Distribution in Manufacturing & Production using ggplot”
+library(ggplot2)
+ggplot(data,aes(x=Price))+
+  geom_histogram(bins=10)+
+  ggtitle("distribution of product price in manufacturing and production")+
+  xlab("price")+
+  ylab("frequency")
+
+#boxplot for manufacturing cost using ggplot
+ggplot(data,aes(y=ManufacturingCost))+
+  geom_boxplot(fill="skyblue",color="darkblue")+
+  ggtitle("box plot of manufacturing cost")+
+  xlab("price")+
+  ylab("frequnecy")
+
+#bivariate analysis and getting regression line 
+# create regression model FIRST
+model <- lm(Price ~ ManufacturingCost, data = data)
+
+# scatter plot
+plot(data$ManufacturingCost,
+     data$Price,
+     main="Price vs Manufacturing Cost",
+     xlab="Manufacturing Cost",
+     ylab="Price",
+     col="blue",
+     pch=19)
+
+# regression line
+abline(model, col="red", lwd=2)
+
+#correlation between price and manufacturing cost 
+cor(data$Price,data$ManufacturingCost)
+
+#use of lapply and sapply
+sapply(data[,3:9],mean,na.rm=T)
+lapply(data[,3:9],summary,na.rm=T)
+
+#attach and detach function
+attach(data)
+range(data$Revenue,na.rm = T)
+min(data$Revenue,na.rm=T)
+max(data$Revenue,na.rm=T)
+detach(data)
+
+#dataframe implementation
+df <- data.frame(
+  ProductType = c("skincare","haircare"),
+  Price = c(61.1, 42.3),
+  Revenue = c(7766, 5000)
+)
+df
+
+
+
+
+
+
+
+
+
+```
+Conclusion
+
+The Manufacturing & Production dataset was analyzed using R programming to understand product pricing and production characteristics. Both numerical and categorical variables were identified and basic statistical measures such as mean, variance, and standard deviation were calculated. Visualizations including histograms, boxplots, and scatter plots helped in understanding data distribution and relationships between variables. Bivariate analysis showed the relationship between price and manufacturing cost, while multivariate functions were used to summarize multiple variables efficiently. Overall, the analysis demonstrated how R can be used for effective data analysis and visualization.
